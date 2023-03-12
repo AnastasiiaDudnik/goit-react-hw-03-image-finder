@@ -27,7 +27,12 @@ export class ImageGallery extends Component {
             status: 'resolved',
           })
         )
+
         .catch(error => this.setState({ error, status: 'rejected' }));
+    }
+
+    if (prevProps.searchQuerry !== searchQuerry) {
+      this.setState({ images: [] });
     }
   }
 
@@ -39,6 +44,15 @@ export class ImageGallery extends Component {
     const { images, error, status } = this.state;
 
     if (status === 'pending') return <Loader />;
+
+    if (status === 'pending' && images.length > 0) {
+      return (
+        <Gallery>
+          <ImageGalleryItem images={images} />
+          <Loader />
+        </Gallery>
+      );
+    }
 
     if (status === 'rejected') {
       return <h1>{error.message}</h1>;
