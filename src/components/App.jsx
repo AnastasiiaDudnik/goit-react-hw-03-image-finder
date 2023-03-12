@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { SearchBar } from './Searchbar/Searchbar';
+import { Container } from './App.styles';
 
 export class App extends Component {
   state = {
@@ -16,11 +17,11 @@ export class App extends Component {
     const { searchQuerry } = this.state;
 
     return (
-      <div>
+      <Container>
         <Toaster />
         <SearchBar onSubmit={this.onFormSubmit} />
         <ImageGallery searchQuerry={searchQuerry} onClick={this.toggleModal} />
-      </div>
+      </Container>
     );
   }
 }

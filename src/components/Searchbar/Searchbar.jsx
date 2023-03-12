@@ -1,6 +1,13 @@
 import { Component } from 'react';
 import { BsSearchHeart } from 'react-icons/bs';
 import toast from 'react-hot-toast';
+import {
+  Searchbar,
+  SearchForm,
+  SearchButton,
+  ButtonLabel,
+  SearchInput,
+} from './Searchbar.styled';
 
 export class SearchBar extends Component {
   state = {
@@ -27,14 +34,14 @@ export class SearchBar extends Component {
   render() {
     const { searchQuerry } = this.state;
     return (
-      <header className="searchbar">
-        <form className="form" onSubmit={this.handleSubmit}>
-          <button type="submit" className="button">
+      <Searchbar>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchButton type="submit">
             <BsSearchHeart />
-            <span className="button-label">Search</span>
-          </button>
+            <ButtonLabel>Search</ButtonLabel>
+          </SearchButton>
 
-          <input
+          <SearchInput
             className="input"
             name="searchQuerry"
             value={searchQuerry}
@@ -44,8 +51,8 @@ export class SearchBar extends Component {
             autoFocus
             placeholder="Search images and photos"
           />
-        </form>
-      </header>
+        </SearchForm>
+      </Searchbar>
     );
   }
 }

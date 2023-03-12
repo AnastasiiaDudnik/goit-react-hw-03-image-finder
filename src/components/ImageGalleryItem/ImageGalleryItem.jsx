@@ -1,6 +1,11 @@
 import { Component } from 'react';
 import { Modal } from 'components/Modal/Modal';
-import { GalleryItem, GalleryImage } from './ImageGalleryItem.styled';
+import {
+  GalleryItem,
+  GalleryImage,
+  CloseModal,
+  CloseSvg,
+} from './ImageGalleryItem.styled';
 
 export class ImageGalleryItem extends Component {
   state = {
@@ -36,9 +41,9 @@ export class ImageGalleryItem extends Component {
         {modalOpen && (
           <Modal onClose={this.handleModalClick}>
             <img src={selectedImage} alt="" width={640} height={450} />
-            <button type="button" onClick={this.toggleModal}>
-              Close modal
-            </button>
+            <CloseModal type="button" onClick={this.handleModalClick}>
+              <CloseSvg />
+            </CloseModal>
           </Modal>
         )}
       </>
