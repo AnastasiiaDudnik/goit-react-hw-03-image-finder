@@ -3,7 +3,7 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalletyItem';
 import { Component } from 'react';
 import { pixabayApi } from 'services/pixabayAPI';
 
-import { ColorRing } from 'react-loader-spinner';
+// import { ColorRing } from 'react-loader-spinner';
 
 export class ImageGallery extends Component {
   state = {
