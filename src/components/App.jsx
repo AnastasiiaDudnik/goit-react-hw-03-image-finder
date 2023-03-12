@@ -35,7 +35,6 @@ export class App extends Component {
         <SearchBar onSubmit={this.onFormSubmit} />
         <ImageGallery searchQuerry={searchQuerry} onClick={this.toggleModal} />
 
-        {/* {loading && <h2>Loading..</h2>} */}
         <button type="button" onClick={this.toggleModal}>
           Open Modal
         </button>

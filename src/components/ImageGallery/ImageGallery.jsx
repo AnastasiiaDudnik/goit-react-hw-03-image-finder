@@ -1,54 +1,55 @@
-import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalletyItem';
-// import { Loader } from 'components/Loader/Loader';
 import { Component } from 'react';
+import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import { Loader } from 'components/Loader/Loader';
 import { pixabayApi } from 'services/pixabayAPI';
-
-// import { ColorRing } from 'react-loader-spinner';
+// import { LoadMoreButton } from 'components/Button/LoadMoreButton';
+import { Gallery } from './ImageGallery.styled';
 
 export class ImageGallery extends Component {
   state = {
-    images: null,
-    loading: false,
+    images: [],
     error: '',
+    status: 'idle',
+    page: 1,
   };
 
   componentDidUpdate(prevProps, prevState) {
     const { searchQuerry } = this.props;
+    const { page } = this.state;
 
-    if (prevProps.searchQuerry !== searchQuerry) {
-      this.setState({ loading: true, images: null });
+    if (prevProps.searchQuerry !== searchQuerry || prevState.page !== page) {
+      this.setState({ status: 'pending' });
 
-      pixabayApi(searchQuerry)
-        .then(response => {
-          console.log(response.json());
-          // if (!response.ok) {
-          //   return Promise.reject(new Error(`Image ${searchQuerry} not found`));
-          // }
-
-          // return response.json();
-        })
-        .then(images => this.setState({ images }))
-        .catch(error => this.setState({ error }))
-        .finally(this.setState({ loading: false }));
+      pixabayApi(searchQuerry.trim(), page)
+        .then(images =>
+          this.setState({
+            images: [...this.state.images, ...images.hits],
+            status: 'resolved',
+          })
+        )
+        .catch(error => this.setState({ error, status: 'rejected' }));
     }
   }
 
-  render() {
-    const { images, loading, error } = this.state;
+  onLoadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
 
-    return (
-      <>
-        {error && <h1>{error}</h1>}
-        {loading && <p>Loading...</p>}
-        {images &&
-          images.hits.map(image => (
-            <ImageGalleryItem
-              key={image.id}
-              img={image}
-              onClick={this.props.toggleModal}
-            />
-          ))}
-      </>
-    );
+  render() {
+    const { images, error, status } = this.state;
+
+    if (status === 'pending') return <Loader />;
+
+    if (status === 'rejected') {
+      return <h1>{error.message}</h1>;
+    }
+
+    if (status === 'resolved')
+      return (
+        <Gallery>
+          <ImageGalleryItem images={images} />
+          <button onClick={this.onLoadMore}> Load more</button>
+        </Gallery>
+      );
   }
 }
