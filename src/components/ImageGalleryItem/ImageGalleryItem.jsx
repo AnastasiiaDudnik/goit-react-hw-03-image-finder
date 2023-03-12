@@ -1,11 +1,47 @@
+import { Component } from 'react';
+import { Modal } from 'components/Modal/Modal';
 import { GalleryItem, GalleryImage } from './ImageGalleryItem.styled';
 
-export const ImageGalleryItem = ({ images, onClick }) => {
-  return images.map(({ id, webformatURL, largeImageURL }) => (
-    <GalleryItem key={id}>
-      <GalleryImage src={webformatURL} alt="" />
-      {/* onClick=
-      {() => onClick(largeImageURL)} */}
-    </GalleryItem>
-  ));
-};
+export class ImageGalleryItem extends Component {
+  state = {
+    modalOpen: false,
+    selectedImage: null,
+  };
+
+  handleModalClick = link => {
+    this.setState(({ modalOpen }) => ({
+      selectedImage: link,
+      modalOpen: !modalOpen,
+    }));
+  };
+
+  render() {
+    const { modalOpen, selectedImage } = this.state;
+
+    return (
+      <>
+        {this.props.images.map(({ id, webformatURL, largeImageURL }) => {
+          return (
+            <GalleryItem key={id}>
+              <GalleryImage
+                src={webformatURL}
+                alt=""
+                onClick={() => {
+                  this.handleModalClick(largeImageURL);
+                }}
+              />
+            </GalleryItem>
+          );
+        })}
+        {modalOpen && (
+          <Modal onClose={this.handleModalClick}>
+            <img src={selectedImage} alt="" width={640} height={450} />
+            <button type="button" onClick={this.toggleModal}>
+              Close modal
+            </button>
+          </Modal>
+        )}
+      </>
+    );
+  }
+}
